@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+requests
+qdrant_client
+sentence_transformers
+langchain_text_splitters
+pydantic
+openai==0.28
+python-multipart 
+streamlit
