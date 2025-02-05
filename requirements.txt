@@ -9,6 +9,5 @@ openai==0.28
 python-multipart 
 streamlit
 python-dotenv   
-pdf2image
-python-poppler
-poppler-utils
+fitz
+cv2

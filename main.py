@@ -12,7 +12,6 @@ from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from vector_db import embed, QdrantProvider
-from pdf2image import convert_from_path
 from dotenv import load_dotenv
 
 load_dotenv()
