@@ -49,17 +49,15 @@ class QdrantProvider:
     def add_vectors_(self, collection_name: str, text):
         """Add multiple vectors to the client collection."""
         points = []
+
         for i, chunk in enumerate(text):
-            print("chunk: ", chunk)
-            chunk_text = "".join(chunk)
-            print("chunk_text: ", chunk_text)
-            vector = embed(chunk_text)
+            vector = embed(chunk)
             
             point = PointStruct(
                 id=str(uuid.uuid4()),  
                 vector=vector,  
                 payload={
-                    "content": chunk_text, 
+                    "content": chunk, 
                 }
             )
             points.append(point)

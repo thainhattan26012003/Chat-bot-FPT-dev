@@ -9,5 +9,6 @@ openai==0.28
 python-multipart 
 streamlit
 python-dotenv   
-fitz
-cv2
+opencv-python-headless
+PyMuPDF==1.19.0
+opencv-python
