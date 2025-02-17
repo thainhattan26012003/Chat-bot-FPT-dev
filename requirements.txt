@@ -12,3 +12,4 @@ python-dotenv
 opencv-python-headless
 PyMuPDF==1.19.0
 opencv-python
+pdfplumber
