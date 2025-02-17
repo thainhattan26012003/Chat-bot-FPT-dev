@@ -6,6 +6,10 @@ services:
     container_name: qdrant-container
     ports:
       - "6333:6333"
+    environment:
+      - QDRANT_URL=https://2b2127d2-f34f-48dd-abde-e9dcd1588e8c.us-east4-0.gcp.cloud.qdrant.io:6333,
+      - QDRANT_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwiZXhwIjoxNzQ3MTk3OTQ0fQ.r0Zk9dZzqQVD9J5M7XiqU_mInPZrbW3rtkavucAjJdQ
+    command: tail -f /dev/null  # Keep the container running
     networks:
       - mynetwork
 

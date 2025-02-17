@@ -26,14 +26,10 @@ text_splitter = RecursiveCharacterTextSplitter(
 )
 
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], 
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    
 )
 
-qdrant_name = 'test'
+qdrant_name = 'CHATBOT_FPT_AI'
 vectordb_provider = QdrantProvider()
 vectordb_provider.create_collection(qdrant_name)
 
@@ -102,7 +98,7 @@ def generate_answer_from_llm(query: str, context: str):
     response = openai.ChatCompletion.create(
     model="gpt-4o-mini",
     messages=[
-        {"role": "system", "content": "You are a well-done assistant."},
+        {"role": "system", "content": "You are a well-done assistant. Answer only based on knowledge from database. NO FLUFF. DO NOT RETURN THE ANSWER IF YOU DO NOT KNOW!"},
         {"role": "user", "content": prompt}
     ],
     max_tokens=200

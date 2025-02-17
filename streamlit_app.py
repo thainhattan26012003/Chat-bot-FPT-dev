@@ -1,25 +1,36 @@
-# streamlit_app.py
 import streamlit as st
 import requests
 
 FASTAPI_URL = "http://fastapi-container:8080"
 
+if "uploaded_files" not in st.session_state:
+    st.session_state["uploaded_files"] = set()  
 
-# File upload widget
-uploaded_file = st.file_uploader("Upload an PDF file", type=["pdf"])
+st.title("Upload multiple PDFs & Ask a question")
 
-if uploaded_file and "uploaded" not in st.session_state:
-    st.write(f"File uploaded: {uploaded_file.name}")
-    files = {"pdf": (uploaded_file.name, uploaded_file, "application/pdf")}
-    
-    with st.spinner("Uploading..."):
-      response = requests.post(f"{FASTAPI_URL}/upload/", files=files)
-    
-    if response.status_code == 200:
-        st.success("Text uploaded to Qdrant successfully!")
-        st.session_state["uploaded"] = True
+# Khu vực upload file
+uploaded_files = st.file_uploader("Upload PDF(s)", 
+                                  type=["pdf"], 
+                                  accept_multiple_files=True)
+
+# Nút upload riêng
+if st.button("Upload file(s)"):
+    if uploaded_files:
+        with st.spinner("Uploading..."):
+            for uploaded_file in uploaded_files:
+                if uploaded_file.name not in st.session_state["uploaded_files"]:
+                    files = {
+                        "pdf": (uploaded_file.name, uploaded_file, "application/pdf")
+                    }
+                    response = requests.post(f"{FASTAPI_URL}/upload/", files=files)
+                    
+                    if response.status_code == 200:
+                        st.success(f"Uploaded {uploaded_file.name} to Qdrant successfully!")
+                        st.session_state["uploaded_files"].add(uploaded_file.name)
+                    else:
+                        st.error(f"Failed to upload {uploaded_file.name}")
     else:
-        st.error("Failed to upload")
+        st.warning("Please choose at least one PDF file.")
 
 # Query input for RAG flow
 question = st.text_input("Ask a question:")

@@ -1,15 +1,18 @@
+import os
 import torch
-from sentence_transformers import SentenceTransformer
 import uuid
+from dotenv import load_dotenv
+from sentence_transformers import SentenceTransformer
 from qdrant_client.http import models
 from qdrant_client.models import PointStruct
 from qdrant_client import QdrantClient
 
+load_dotenv('.env')
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"Using device: {device}")
 
-
-client = QdrantClient(host="qdrant-container", port=6333)
+client = QdrantClient(url=os.getenv("QDRANT_URL"), 
+    api_key=os.getenv("QDRANT_API_KEY"))
 
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", trust_remote_code=True, device=device)
 
