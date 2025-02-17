@@ -26,7 +26,11 @@ text_splitter = RecursiveCharacterTextSplitter(
 )
 
 app.add_middleware(
-    
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 qdrant_name = 'CHATBOT_FPT_AI'
