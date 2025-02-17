@@ -49,14 +49,14 @@
 import streamlit as st
 import requests
 import pdfplumber
+from io import BytesIO
 
-pdf_path = "P:\FA24\extract_texts\\test_data\documents.pdf"
 
-def extract_all_pages_images(file_upload):
+def extract_all_pages_images(file_upload, dpi=300):
     pdf_pages = []
     
     with pdfplumber.open(file_upload) as pdf:
-        pdf_pages = [page.to_image().original for page in pdf.pages]
+        pdf_pages = [page.to_image(resolution=dpi).original for page in pdf.pages]
         
         return pdf_pages
 
@@ -64,12 +64,15 @@ FASTAPI_URL = "http://fastapi-container:8080"
 
 st.set_page_config(page_title="Demo AI Extract Documents App", page_icon="🧠", layout="wide", initial_sidebar_state="collapsed")
 
-col1, col2 = st.columns([1.5, 2])
+col1, col2 = st.columns([2, 2])
 
-# Query input for RAG flow
-question = col1.text_input("Ask a question:")
 
 with col1:
+    uploaded_files = st.file_uploader("Upload PDF(s)", 
+                                    type=["pdf"], 
+                                    accept_multiple_files=True)    
+    # Query input for RAG flow
+    question = col1.text_input("Ask a question:")
     if st.button("Submit"):
         if question:
             payload = {"question": question}
@@ -81,16 +84,19 @@ with col1:
                 st.write("Answer:", response.json().get("answer"))
             else:
                 st.error("Failed to get an answer.")
+    if uploaded_files:
+        st.session_state["uploaded_files"] = uploaded_files
 
 with col2:
-    st.write("### Nội dung file PDF:")
+    st.write("### PDF Viewer")
 
-    pdf_pages = extract_all_pages_images(pdf_path)
-    
-    st.session_state["pdf_pages"] = pdf_pages
-    
-    zoom_level = col2.slider("Zoom level", min_value=100, max_value=1000, value=700, step=100)
-    
-    with st.container(height=800, border=True):
-        for page in pdf_pages:
-            st.image(page, use_container_width=True, output_format="PNG", width=zoom_level)
+    if "uploaded_files" in st.session_state and st.session_state["uploaded_files"]:
+        pdf_pages = []
+        
+        for uploaded_file in st.session_state["uploaded_files"]:
+            file_bytes = BytesIO(uploaded_file.read())
+            pdf_pages.extend(extract_all_pages_images(file_bytes))
+        
+        with st.container(height=500, border=True):
+            for page in pdf_pages:
+                st.image(page, use_container_width=True, output_format="PNG")

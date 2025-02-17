@@ -33,7 +33,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-qdrant_name = 'CHATBOT_FPT_AI'
+qdrant_name = 'QDRANT_CLOUD'
 vectordb_provider = QdrantProvider()
 vectordb_provider.create_collection(qdrant_name)
 

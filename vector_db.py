@@ -12,7 +12,7 @@ load_dotenv('.env')
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 client = QdrantClient(url=os.getenv("QDRANT_URL"), 
-    api_key=os.getenv("QDRANT_API_KEY"))
+    api_key=os.getenv("QDRANT_API_KEY"), port=6333)
 
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", trust_remote_code=True, device=device)
 
