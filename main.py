@@ -37,7 +37,7 @@ qdrant_name = 'QDRANT_CLOUD'
 vectordb_provider = QdrantProvider()
 vectordb_provider.create_collection(qdrant_name)
 
-EXTRACT_TEXTS_URL = "http://ec2-52-1-115-193.compute-1.amazonaws.com:8000/extract_texts"
+EXTRACT_TEXTS_URL = "http://ec2-54-86-234-1.compute-1.amazonaws.com:8000/extract_texts"
     
 @app.post("/upload/")
 async def upload_file(pdf: UploadFile = File(...)):
